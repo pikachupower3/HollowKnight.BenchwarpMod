@@ -117,8 +117,8 @@ namespace Benchwarp
             return GameManager.instance.sm.mapZone switch
             {
                 GlobalEnums.MapZone.DREAM_WORLD
-                or GlobalEnums.MapZone.GODS_GLORY
-                or GlobalEnums.MapZone.GODSEEKER_WASTE
+                //or GlobalEnums.MapZone.GODS_GLORY
+                //or GlobalEnums.MapZone.GODSEEKER_WASTE
                 or GlobalEnums.MapZone.WHITE_PALACE => true,
                 _ => false,
             };
