@@ -1,5 +1,6 @@
 ﻿using Modding;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static Benchwarp.Benchwarp;
 
 namespace Benchwarp
@@ -14,7 +15,8 @@ namespace Benchwarp
             ModHooks.GetPlayerStringHook += RespawnAtDeployedBench;
             ModHooks.SetPlayerStringHook += RemoveRespawnFromDeployedBench;
             // Imagine if GetPlayerIntHook actually worked
-            On.GameManager.OnNextLevelReady += FixRespawnType;
+            //On.GameManager.OnNextLevelReady += FixRespawnType;
+            On.GameManager.LevelActivated += FixRespawnType;
             On.PlayMakerFSM.OnEnable += OnEnableBenchFsm;
             Events.OnBenchwarp += ChangeScene.OnBenchwarpCleanup;
         }
@@ -26,7 +28,8 @@ namespace Benchwarp
             ModHooks.SetPlayerBoolHook -= BenchWatcher;
             ModHooks.GetPlayerStringHook -= RespawnAtDeployedBench;
             ModHooks.SetPlayerStringHook -= RemoveRespawnFromDeployedBench;
-            On.GameManager.OnNextLevelReady -= FixRespawnType;
+            //On.GameManager.OnNextLevelReady -= FixRespawnType;
+            On.GameManager.LevelActivated -= FixRespawnType;
             On.PlayMakerFSM.OnEnable -= OnEnableBenchFsm;
             Events.OnBenchwarp -= ChangeScene.OnBenchwarpCleanup;
         }
@@ -76,7 +79,7 @@ namespace Benchwarp
                 _ => value,
             };
 
-        private static void FixRespawnType(On.GameManager.orig_OnNextLevelReady orig, GameManager self)
+        private static void FixRespawnType(On.GameManager.orig_LevelActivated orig, GameManager self, Scene from, Scene to)
         {
             if (GameManager.instance.RespawningHero)
             {
@@ -92,7 +95,7 @@ namespace Benchwarp
                 }
             }
 
-            orig(self);
+            orig(self, from, to);
         }
 
         private static void OnEnableBenchFsm(On.PlayMakerFSM.orig_OnEnable orig, PlayMakerFSM fsm)
